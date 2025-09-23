@@ -1,0 +1,5 @@
+task_config: ${task_dir}/gsm8k/zeroshot/gdg-gsm8k-sequential.yaml
+nsolutions: 5
+type: sequential
+shots: 0
+name: "${task.type}/gsm8k_0shot"

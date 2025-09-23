@@ -1,0 +1,5 @@
+task_config: ${task_dir}/gsm8k/zeroshot/gdg-gsm8k-parallel.yaml
+nsolutions: 5
+type: parallel
+shots: 0
+name: "${task.type}/gsm8k_0shot"  # name of the task, used in output directory

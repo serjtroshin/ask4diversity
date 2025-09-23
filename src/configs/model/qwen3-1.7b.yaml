@@ -1,0 +1,5 @@
+name:    Qwen/Qwen3-1.7B     # required at runtime: e.g. facebook/opt-6.7b or Qwen/Qwen3-1.7B
+dtype:   bfloat16                                     # float32, float16, bfloat16 or auto
+device:  cuda                                         # auto, cuda, cpu, etc.
+generation_config: auto
+cache_dir: ${transformers_cache_dir}  # path to cache directory for model files

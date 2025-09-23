@@ -1,0 +1,47 @@
+# root config that pulls in your single model group + task config
+defaults:
+  - _self_
+  - defaults  # reference the defaults.yaml
+  - model: qwen3-1.7b
+  - task: zeroshot_gsm8k_sequential
+  # - override hydra/launcher: submitit_slurm  - figure out later
+
+limit: null         # no limit by default
+transformers_cache_dir: "${HOME}/.cache/huggingface/hub/"
+
+generation:   # generation configuration
+  model_wrapper: vllm         # transformers or vllm
+  batch_size: 16  # batch size for generation
+  seed: 0
+  max_gen_toks: 4132
+
+output: # output configuration
+  dir_name: outputs
+  base_dir: ${output.dir_name}/${experiment.out_dir}/${task.name}/${model.name}/dsbl_think=${template.disable_thinking}  # base directory for all outputs
+
+experiment:
+  name: default_experiment  # name of the experiment, used in output directory
+  out_dir: ${experiment.name}_limit.${limit} # output directory for the experiment
+
+
+task_dir: src/tasks
+template:   # template for chat models
+  disable_chat_template: false
+  disable_thinking:      false
+
+logging:
+  verbosity: INFO
+
+override: false                   # whether to write results if the folder already exists
+
+diversity:
+  name: distinct_ngram_diversity  # name of the diversity metric
+  n: 5                           # n-gram size for diversity calculation
+  report_file: outputs/${experiment.out_dir}/diversity_report.csv  # file to save the diversity report
+  calculate_over_first_k: ${task.nsolutions}  # calculate diversity over the first k solutions
+
+arithmetic:  # arithmetic expression extraction configuration
+  model_name: "Qwen/Qwen3-32B"   # judge model for arithmetic extraction
+  batch_size: 8                  # batch size for arithmetic extraction
+  verbose: false                  # show detailed example of first question, solutions, and arithmetic expressions
+  skip_inference: false          # if true, skip inference and only compute metrics from existing arithmetic expressions (useful for re-running metrics without re-extracting expressions)

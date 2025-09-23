@@ -1,0 +1,50 @@
+hydra:
+  # ───────────────────────────── Single‐run output directory ─────────────────────────────
+  run:
+    # Base directory for regular (non-sweep) runs.
+    # Uses:
+    #   - ${output.base_dir}   : your project-level outputs folder
+    #   - ${experiment.name}   : current experiment identifier
+    #   - ${now:%Y-%m-%d_%H-%M-%S} : timestamp for uniqueness
+    dir: ${output.base_dir}/seed-${generation.seed}
+
+  # ────────────────────────────── Sweep (multirun) output directory ──────────────────────────────
+  sweep:
+    # Top-level folder under which all sweeps are stored
+    dir: ${output.base_dir}/sweeps/
+    # Subdirectory pattern for each individual sweep job
+    # Uses:
+    #   - ${experiment.name}         : current experiment
+    #   - ${hydra.sweep.launcher.name}: e.g. 'basic', 'ray', etc.
+    #   - ${hydra.job.override_dirname}: encoded CLI overrides (e.g. lr=1e-3,bs=32)
+    subdir: ${hydra.job.override_dirname}/seed-${generation.seed}
+
+  # ────────────────────────────── Hidden Hydra folder name ──────────────────────────────
+  # This is where Hydra dumps its own config.yaml and hydra logs inside each run dir.
+  # Set to null to disable creating this folder entirely.
+  output_subdir: .hydra
+
+  # ──────────────────── How CLI overrides form part of the folder name ────────────────────
+  job:
+    config:
+      override_dirname:
+        # Separator between key and value in override strings
+        kv_sep: "="
+        # Separator between multiple CLI-override items
+        item_sep: ","
+        # Don’t include these fields in the folder name
+        exclude_keys:
+          - seed
+          - logging.verbosity
+
+    chdir: false  # Whether to change working directory to the run dir
+
+  # launcher:
+  #   # SLURM resource requests
+  #   partition: gpu              # --partition=gpu :contentReference[oaicite:2]{index=2}
+  #   nodes: 1                    # --ntasks=1 (with tasks_per_node=1) 
+  #   tasks_per_node: 1           # --ntasks=1 
+  #   cpus_per_task: 6            # -c 6 :contentReference[oaicite:5]{index=5}
+  #   gpus_per_task: 1            # --gpus-per-task=1 
+  #   mem_per_gpu: 48             # --mem-per-gpu=48GB 
+  #   timeout_min: 360            # --time=6:00:00 → 360 minutes :contentReference[oaicite:8]{index=8}
