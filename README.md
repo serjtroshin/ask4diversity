@@ -1,5 +1,7 @@
 This is supplementary code for the paper ["Asking a Language Model for Diverse Responses"](https://arxiv.org/abs/2509.17570) presented at the Second Workshop on Uncertainty-Aware NLP at EMNLP 2025.
 
+For a plug-and-play implementation of sequential sampling strategies please refer to https://github.com/serjtroshin/seqsampling.
+
 # Installation
 
 ## 1. Create a virtual environment:
